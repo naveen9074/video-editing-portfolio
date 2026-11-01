@@ -1,0 +1,64 @@
+# Dependencies and build output
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Local settings and temporary files
+.claude/settings.local.json
+*.local
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+*.cache
+.cache/
+.vite/
+.turbo/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Personal document not used by the website
+/Naveen_P_Resume video editor.pdf
+
+# Keep large video exports out of GitHub; project entries and posters stay tracked
+*.mp4
+*.mov
+*.m4v
+*.avi
+*.mkv
+*.webm
+*.mpg
+*.mpeg
+*.wmv

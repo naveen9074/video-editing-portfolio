@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="a" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#f0d7ca"/>
+      <stop offset=".48" stop-color="#b6a0d8"/>
+      <stop offset="1" stop-color="#65518d"/>
+    </linearGradient>
+    <pattern id="b" width="18" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h18M9 0v18" stroke="#fff" stroke-opacity=".15"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#a)"/>
+  <rect width="1280" height="720" fill="url(#b)"/>
+  <path d="M0 572c198-88 346-94 495-22s291 68 423-18 240-80 362-28v216H0z" fill="#453365" opacity=".8"/>
+  <circle cx="882" cy="266" r="172" fill="#f3c9ce" opacity=".9"/>
+  <circle cx="882" cy="266" r="126" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+  <path d="M170 112h180v2H170zm0 12h92v2h-92z" fill="#fff"/>
+  <text x="116" y="630" fill="#fff" font-family="Georgia,serif" font-size="46" font-style="italic">A story in motion</text>
+  <text x="1120" y="642" fill="#fff" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">YOUR FILM</text>
+</svg>

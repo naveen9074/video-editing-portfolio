@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600">
+  <defs>
+    <linearGradient id="a" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#f0c8cc"/>
+      <stop offset=".55" stop-color="#b9a1dc"/>
+      <stop offset="1" stop-color="#684a9e"/>
+    </linearGradient>
+    <pattern id="b" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0 24 24 0" stroke="#fff" stroke-opacity=".14"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="1600" fill="#ede5f6"/>
+  <rect x="70" y="82" width="760" height="1436" rx="350" fill="url(#a)"/>
+  <rect x="70" y="82" width="760" height="1436" rx="350" fill="url(#b)"/>
+  <circle cx="451" cy="608" r="220" fill="#f3d9bd"/>
+  <path d="M190 1172c50-218 139-328 263-328s213 110 263 328v213H190z" fill="#463567"/>
+  <path d="M146 1264c160-166 434-186 610-7" fill="none" stroke="#fff" stroke-width="5" opacity=".8"/>
+  <text x="127" y="127" fill="#463567" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">A CONVERSATION / 04</text>
+  <text x="145" y="1460" fill="#fff" font-family="Georgia,serif" font-size="48" font-style="italic">Good things take a beat.</text>
+</svg>

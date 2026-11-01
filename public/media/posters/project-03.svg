@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <defs>
+    <linearGradient id="a" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#f2d8d1"/>
+      <stop offset="1" stop-color="#c5b2e8"/>
+    </linearGradient>
+    <pattern id="b" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#453365" opacity=".19"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="900" fill="url(#a)"/>
+  <rect width="900" height="900" fill="url(#b)"/>
+  <path d="M470 84c194 80 325 229 325 372S664 748 470 816c116-124 172-244 172-360S586 207 470 84z" fill="#7655b1"/>
+  <path d="M430 84c-194 80-325 229-325 372s131 292 325 360c-116-124-172-244-172-360S314 207 430 84z" fill="#fffdf8" opacity=".88"/>
+  <circle cx="450" cy="456" r="146" fill="#453365"/>
+  <circle cx="450" cy="456" r="112" fill="none" stroke="#f1c7d4" stroke-width="2"/>
+  <path d="M431 412v88l73-44z" fill="#f1c7d4"/>
+  <text x="54" y="68" fill="#453365" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">MOTION STUDY / 03</text>
+  <text x="54" y="847" fill="#453365" font-family="Georgia,serif" font-size="35" font-style="italic">Shape / sound / movement</text>
+</svg>
