@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
+import GlareHover from './components/GlareHover'
 import {
   categories,
   contact,
   featuredProject,
+  portfolio,
   profileImage,
   projects,
   type Project,
   type ProjectCategory,
 } from './data/projects'
+import { getEmbedUrl, isGoogleDriveShareUrl, mediaUrl } from './data/media'
 
 function App() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory | 'All'>('All')
@@ -21,6 +24,18 @@ function App() {
     () => [...(activeCategory === 'All' ? projects : projects.filter((project) => project.category === activeCategory))]
       .sort((left, right) => left.order - right.order),
     [activeCategory],
+  )
+  const embedUrl = selectedProject ? getEmbedUrl(selectedProject) : null
+  const resolveMediaUrl = (path: string) => mediaUrl(path, import.meta.env.BASE_URL)
+  const isDriveShare = selectedProject ? isGoogleDriveShareUrl(selectedProject.video) : false
+  const hasInvalidEmbed = Boolean(
+    selectedProject?.video
+    && (selectedProject.sourceType === 'youtube' || selectedProject.sourceType === 'vimeo')
+    && !embedUrl,
+  )
+  const showPlayerPlaceholder = Boolean(
+    selectedProject
+    && (!selectedProject.video || videoError || isDriveShare || hasInvalidEmbed),
   )
 
   useEffect(() => {
@@ -88,8 +103,8 @@ function App() {
     <div className="studio-page">
       <header className="site-header">
         <a className="wordmark" href="#home" aria-label="Home">
-          <span className="wordmark-icon" aria-hidden="true">n<span>.</span></span>
-          <span className="wordmark-name">NAVEEN<br /><small>IMAGE MAKER</small></span>
+          <span className="wordmark-icon" aria-hidden="true">{portfolio.displayName.charAt(0).toLowerCase()}<span>.</span></span>
+          <span className="wordmark-name">{portfolio.displayName.toUpperCase()}<br /><small>{portfolio.studioIdentity}</small></span>
         </a>
 
         <button
@@ -114,7 +129,7 @@ function App() {
       <main id="home">
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-topline">
-            <span>Independent editor <i>✳</i> Motion designer</span>
+            <span>{portfolio.professionalTitle} <i>✳</i> Independent work</span>
             <span>Based wherever the story is</span>
           </div>
 
@@ -126,14 +141,14 @@ function App() {
                 <span className="headline-mask headline-middle"><span>cut</span></span>
                 <span className="headline-mask headline-last"><span>different<span className="headline-stop">.</span></span></span>
               </h1>
-              <p className="hero-intro">I’m a video editor &amp; motion designer turning good footage into work that feels like something.</p>
+              <p className="hero-intro">{portfolio.shortIntroduction}</p>
               <a href="#work" className="hero-cta"><span>Come see the work</span><b>↘</b></a>
             </div>
 
             <div className="hero-collage" aria-label="Featured showreel preview">
               <div className="collage-backdrop" />
               {profileImage ? (
-                <img className="portrait-cutout" src={profileImage} alt="Portrait of the editor" fetchPriority="high" />
+                <img className="portrait-cutout" src={resolveMediaUrl(profileImage)} alt={`Portrait of ${portfolio.displayName}`} fetchPriority="high" />
               ) : (
                 <div className="portrait-placeholder" aria-label="Add your portrait in the media profile folder">
                   <span className="portrait-sun" />
@@ -143,7 +158,7 @@ function App() {
               )}
               <button className="showreel-card" type="button" onClick={() => openProject(featuredProject)} aria-label={`Play ${featuredProject.title}`}>
                 <span className="showreel-card-image">
-                  <img src={featuredProject.poster} alt="" fetchPriority="high" />
+                  <img src={resolveMediaUrl(featuredProject.poster)} alt="" fetchPriority="high" />
                   <span className="showreel-play"><i aria-hidden="true" />Play the reel</span>
                   <span className="showreel-card-count">FEATURED FILM&nbsp;&nbsp; / &nbsp;&nbsp;00:00</span>
                 </span>
@@ -199,14 +214,24 @@ function App() {
                   data-reveal
                   style={{ order: project.order }}
                 >
-                  <button className="project-open" type="button" onClick={() => openProject(project)} aria-label={`Play ${project.title}`}>
-                    <span className="project-art" style={{ aspectRatio: project.aspectRatio }}>
-                      <img src={project.poster} alt="" loading="lazy" />
-                      <span className="project-placeholder-note">Your frame goes here</span>
-                      <span className="project-number">{String(index + 1).padStart(2, '0')}</span>
-                      <span className="project-play"><i aria-hidden="true" /> Play film</span>
-                    </span>
-                  </button>
+                  <GlareHover
+                    className="project-glare"
+                    width="100%"
+                    borderRadius="15px"
+                    glareOpacity={0.2}
+                    glareSize={18}
+                    transitionDuration={650}
+                    rimGlint={false}
+                  >
+                    <button className="project-open" type="button" onClick={() => openProject(project)} aria-label={`Play ${project.title}`}>
+                      <span className="project-art" style={{ aspectRatio: project.aspectRatio }}>
+                        <img src={resolveMediaUrl(project.poster)} alt="" loading="lazy" />
+                        <span className="project-placeholder-note">Your frame goes here</span>
+                        <span className="project-number">{String(index + 1).padStart(2, '0')}</span>
+                        <span className="project-play"><i aria-hidden="true" /> Play film</span>
+                      </span>
+                    </button>
+                  </GlareHover>
                   <div className="project-meta">
                     <div className="project-title-line">
                       <span className="project-category">{project.category}</span>
@@ -244,7 +269,7 @@ function App() {
           <div className="about-layout">
             <div className="about-portrait" data-reveal>
               {profileImage ? (
-                <img src={profileImage} alt="Portrait of the editor" loading="lazy" />
+                <img src={resolveMediaUrl(profileImage)} alt={`Portrait of ${portfolio.displayName}`} loading="lazy" />
               ) : (
                 <div className="portrait-placeholder portrait-about">
                   <span className="portrait-sun" />
@@ -253,13 +278,12 @@ function App() {
                   <span className="portrait-hint">Add your image<br /><small>public/media/profile/</small></span>
                 </div>
               )}
-              <span className="about-image-index">AN EDITORIAL SELF-PORTRAIT / SOON</span>
+              <span className="about-image-index">{profileImage ? 'EDITOR PORTRAIT' : 'ADD YOUR PORTRAIT IN THE MEDIA FOLDER'}</span>
             </div>
             <div className="about-copy" data-reveal>
-              <p className="section-overline">Hello, I’m Naveen.</p>
+              <p className="section-overline">Hello, I’m {portfolio.displayName}.</p>
               <h2 id="about-title">A good cut<br />knows when to <em>stay.</em></h2>
-              <p>I’m a video editor and motion designer drawn to the small decisions that change how a story lands: a beat held a little longer, a cut that feels inevitable, a frame that says enough.</p>
-              <p>Every edit starts with what the story needs. From social-first cuts to cinematic pieces, I bring care to the pacing, the details, and the way it feels to watch.</p>
+              {portfolio.biography.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               <div className="capabilities">
                 <span>Video editing</span><span>Short-form</span><span>Podcast</span><span>Motion</span><span>Color</span>
               </div>
@@ -280,8 +304,8 @@ function App() {
             )}
           </div>
           <footer id="contact-links" className="site-footer">
-            <a className="footer-wordmark" href="#home" aria-label="Back to top">n<span>.</span></a>
-            <span className="footer-caption">Video editor &amp; motion designer</span>
+            <a className="footer-wordmark" href="#home" aria-label="Back to top">{portfolio.displayName.charAt(0).toLowerCase()}<span>.</span></a>
+            <span className="footer-caption">{portfolio.professionalTitle}</span>
             <div className="footer-socials">
               {contact.email && <a href={`mailto:${contact.email}`}>Email ↗</a>}
               {contact.whatsapp && <a href={`https://wa.me/${contact.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noreferrer">WhatsApp ↗</a>}
@@ -316,38 +340,47 @@ function App() {
               style={{
                 aspectRatio: selectedProject.aspectRatio,
                 width: selectedProject.aspectRatio <= 1 ? 'auto' : '100%',
-                height: selectedProject.aspectRatio <= 1 ? 'min(72svh, 95vw)' : 'auto',
+                height: selectedProject.aspectRatio <= 1 ? 'min(72svh, 80vw)' : 'auto',
               }}
             >
-              {selectedProject.video && selectedProject.sourceType === 'youtube' && (
+              {selectedProject.video && selectedProject.sourceType === 'youtube' && embedUrl && (
                 <iframe
-                  src={selectedProject.video}
+                  src={embedUrl}
                   title={selectedProject.title}
                   loading="lazy"
-                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 />
               )}
-              {selectedProject.video && selectedProject.sourceType === 'vimeo' && (
-                <iframe src={selectedProject.video} title={selectedProject.title} loading="lazy" allow="fullscreen; picture-in-picture" allowFullScreen />
+              {selectedProject.video && selectedProject.sourceType === 'vimeo' && embedUrl && (
+                <iframe src={embedUrl} title={selectedProject.title} loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
               )}
-              {selectedProject.video && !videoError && (selectedProject.sourceType === 'mp4' || selectedProject.sourceType === 'local') && (
+              {selectedProject.video && !videoError && !isDriveShare && (selectedProject.sourceType === 'mp4' || selectedProject.sourceType === 'local') && (
                 <video
                   controls
                   preload="none"
                   playsInline
-                  poster={selectedProject.poster}
+                  poster={resolveMediaUrl(selectedProject.poster)}
                   onError={() => setVideoError(true)}
                 >
-                  <source src={selectedProject.video} type="video/mp4" />
+                  <source src={resolveMediaUrl(selectedProject.video)} type="video/mp4" />
                   Your browser does not support video playback.
                 </video>
               )}
-              {(!selectedProject.video || videoError) && (
+              {showPlayerPlaceholder && (
                 <div className="player-placeholder">
                   <span className="player-mark" aria-hidden="true">✳</span>
                   <p>{videoError ? 'This video didn’t load.' : 'Your film, right here.'}</p>
-                  <span>{videoError ? <>Check the URL and host permissions in <code>src/data/projects.ts</code>.</> : <>Add its video URL in <code>src/data/projects.ts</code> to enable playback.</>}</span>
+                  <span>
+                    {videoError
+                      ? <>Check the URL and host permissions in <code>src/data/projects.ts</code>.</>
+                      : isDriveShare
+                        ? <>Google Drive sharing links are not direct MP4 streams. Use YouTube, Vimeo or a direct MP4 URL.</>
+                        : hasInvalidEmbed
+                          ? <>Add a valid YouTube or Vimeo watch/embed URL in <code>src/data/projects.ts</code>.</>
+                          : <>Add its video URL in <code>src/data/projects.ts</code> to enable playback.</>}
+                  </span>
                 </div>
               )}
             </div>

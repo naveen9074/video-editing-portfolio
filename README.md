@@ -1,70 +1,62 @@
-# Video editor portfolio
+# Naveen — Video Editor & Motion Designer
 
-Responsive React + Vite portfolio. Videos play on-page in a modal; no backend, upload dashboard, paid API, or runtime service is required.
+A responsive React, TypeScript, and Vite portfolio with a Liquid Glass visual system. Project filters, variable-aspect-ratio previews, lazy video playback, and a keyboard-accessible player are built in. There is no backend, upload dashboard, paid API, or animation-library dependency.
 
-## Run / build
+The gallery uses the official React Bits GlareHover source for a subtle cursor reflection; its source and license notice are in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+
+## Run locally
 
 ```sh
-npm install
+npm ci
 npm run dev
+npm run lint
+npm test
 npm run build
+npm run preview
 ```
+
+## Configure your identity
+
+Update the `portfolio` object in [`src/data/projects.ts`](./src/data/projects.ts):
+
+- `displayName`, `studioIdentity`, and `professionalTitle` update the portfolio identity.
+- `shortIntroduction` and `biography` hold your editable introduction and about text.
+- `profileImage` points to your real portrait; add it under `public/media/profile/`, for example `'/media/profile/naveen.webp'`. No portrait is included by default.
+- `contact.email`, `contact.whatsapp`, `contact.instagram`, and `contact.linkedin` are intentionally blank until you add your own details. Use full profile URLs for Instagram and LinkedIn, and a WhatsApp number with its country code.
+- `showreelProjectId` selects a project from the project list for the hero preview.
 
 ## Add a project
 
-Project entries live in [`src/data/projects.ts`](./src/data/projects.ts). Duplicate an entry and update:
+Projects are configured in `src/data/projects.ts`; adding or reordering a project does not require editing a React component. Duplicate an entry and set:
 
-- `id`, `title`, `category`, and `order` (lower order numbers appear first).
-- `poster`: a path under `public/media/posters/`, e.g. `/media/posters/trailer.webp`.
-- `video`: a local MP4 path or an embed/direct video URL. Keep empty until the video is ready.
-- `sourceType`: `local`, `mp4`, `youtube`, or `vimeo`.
-- `aspectRatio`: the actual width divided by height, e.g. `9 / 16`, `4 / 5`, `1`, or `16 / 9`. For a custom ratio use its numeric value, e.g. `1.25`.
-- `layout`: editorial gallery placement — `feature`, `portrait`, `wide`, or `square`. This affects gallery position only; `aspectRatio` controls the media frame.
-- Optional `description`, `role`, and `featured: true`.
+- `id`, `title`, `category`, and `order` (lower numbers appear first).
+- `poster`: a lightweight thumbnail under `public/media/posters/`, such as `'/media/posters/launch.webp'`.
+- `video`: a YouTube/Vimeo video URL, direct MP4 URL, or local file path.
+- `sourceType`: `'youtube'`, `'vimeo'`, `'mp4'` (direct stream), or `'local'`.
+- `aspectRatio`: width divided by height, such as `9 / 16`, `4 / 5`, `1`, or `16 / 9`; custom numeric ratios are supported.
+- `layout`: `'feature'`, `'wide'`, `'portrait'`, or `'square'` controls gallery placement. The configured aspect ratio controls the media frame, so footage is not stretched to fit the layout.
+- Optional `description`, `role`, and `featured`.
 
-The featured project supplies the hero showreel preview. Choose only one `featured` project.
+The included poster artwork and project titles are placeholders, not real client work. Replace them with your own compressed thumbnails and project details. If you add a category not already listed, add it to the `categories` array in the same file.
 
-### Local video
+## Video hosting and local media
 
-Place an optimized MP4 under `public/media/videos/`, then configure:
+**Recommended: YouTube unlisted.** Upload the finished video to YouTube, set visibility to **Unlisted**, and use its video URL (for example `https://youtu.be/VIDEO_ID`) or embed URL. The player converts supported YouTube watch/share URLs to a privacy-enhanced embed and loads only after the viewer opens a project. Anyone who obtains an unlisted link may be able to watch it; unlisted is not private.
 
-```ts
-{
-  id: 'my-edit',
-  title: 'Project title',
-  category: 'Short-form',
-  poster: '/media/posters/my-edit.webp',
-  video: '/media/videos/my-edit.mp4',
-  sourceType: 'local',
-  aspectRatio: 9 / 16,
-  order: 1,
-  layout: 'feature',
-}
-```
+**Vimeo:** use a Vimeo video/share or player URL and allow embedding in the video's privacy settings. For an unlisted video, preserve its privacy hash (the `h` value) in the URL.
 
-Use an `ffprobe` binary if available to check source dimensions:
+**Direct MP4:** set `sourceType: 'mp4'` and `video` to a direct, playable `.mp4` stream URL. A Google Drive sharing page is not a direct video stream and will not work as an MP4 source.
 
-```sh
-ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 my-edit.mp4
-```
+**Small local MP4:** put an optimized export in `public/media/videos/`, use a path such as `'/media/videos/project-01.mp4'`, and set `sourceType: 'local'`. Local video files are ignored by Git to prevent accidental large uploads. If the optimized file is small enough to include in your deployment, explicitly add only that file with `git add -f public/media/videos/project-01.mp4`. Prefer hosted embeds for larger videos; do not commit full-resolution exports.
 
-Divide the reported width by height for `aspectRatio`. If ffprobe isn't installed, the field is editable and can be set using the video's export dimensions.
+Players are created only after a project is selected. Local playback uses the configured poster and `preload="none"`. See [`public/media/videos/README.md`](./public/media/videos/README.md) for the short hosting checklist.
 
-### YouTube / Vimeo
+## Deploy to GitHub Pages
 
-- YouTube: use an embed URL such as `https://www.youtube.com/embed/VIDEO_ID` (public or unlisted; check embed settings).
-- Vimeo: use `https://player.vimeo.com/video/VIDEO_ID` and allow embedding in the Vimeo privacy settings.
-- Direct MP4: use its direct `.mp4` stream URL with `sourceType: 'mp4'`.
+The repository includes a GitHub Actions workflow at [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml). It installs dependencies, lints, builds, and deploys `dist/` when changes are pushed to `main`. Vite uses the `/video-editing-portfolio/` base path in Actions builds; no generated `dist/` files are committed.
 
-Players are created only after opening a project. Native MP4 playback uses `preload="none"` and the configured poster.
+1. In the repository, open **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**.
+2. Push or merge the workflow to `main`, or run **Actions → Build and deploy portfolio → Run workflow**.
+3. Confirm the run succeeds in the **Actions** tab. GitHub Pages will then be available at **<https://naveen9074.github.io/video-editing-portfolio/>**.
 
-## Portrait and contact
-
-- Add your real photo to `public/media/profile/profile.jpg`, then set `profileImage` in `src/data/projects.ts` to `/media/profile/profile.jpg`. Until then, the site displays an illustrated placeholder.
-- Update the `contact` object in `src/data/projects.ts`. Instagram and LinkedIn values should be full profile URLs; WhatsApp should be a number including country code.
-
-The poster illustrations included with the project are placeholders, not actual client work. Replace them with compressed frames from your own edits before publishing. See [`public/media/README.md`](./public/media/README.md) for the asset folders.
-
-## Deploy
-
-Run `npm run build` and deploy the generated `dist/` folder to a static host. Check that external hosts permit embedding and MP4 playback before publishing.
+The repository must remain public for GitHub Pages on GitHub Free. Pages publishes a public website; do not put secrets or private information in the site or repository.

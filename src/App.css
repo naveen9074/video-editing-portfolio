@@ -446,6 +446,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid #c9afff; outline-offs
 
 .project-gallery { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; gap: 38px 23px; }
 .project-card { min-width: 0; }
+.glare-hover.project-glare { display: block; width: 100%; height: auto; }
+.project-glare > .project-open { width: 100%; }
 .layout-feature { grid-column: span 5; }
 .layout-wide { grid-column: span 7; }
 .layout-square { grid-column: span 5; }

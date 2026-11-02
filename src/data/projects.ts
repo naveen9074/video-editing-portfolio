@@ -17,14 +17,27 @@ export type Project = {
   layout: 'feature' | 'portrait' | 'wide' | 'square'
 }
 
-export const contact = {
-  email: '',
-  whatsapp: '',
-  instagram: '',
-  linkedin: '',
+export const portfolio = {
+  displayName: 'Naveen',
+  studioIdentity: 'IMAGE MAKER',
+  professionalTitle: 'Video Editor & Motion Designer',
+  shortIntroduction: 'I’m a video editor & motion designer turning good footage into work that feels like something.',
+  biography: [
+    'I’m a video editor and motion designer drawn to the small decisions that change how a story lands: a beat held a little longer, a cut that feels inevitable, a frame that says enough.',
+    'Every edit starts with what the story needs. From social-first cuts to cinematic pieces, I bring care to the pacing, the details, and the way it feels to watch.',
+  ],
+  profileImage: '',
+  contact: {
+    email: '',
+    whatsapp: '',
+    instagram: '',
+    linkedin: '',
+  },
+  showreelProjectId: 'project-01',
 }
 
-export const profileImage = ''
+export const contact = portfolio.contact
+export const profileImage = portfolio.profileImage
 
 export const projects: Project[] = [
   {
@@ -74,4 +87,7 @@ export const projects: Project[] = [
   },
 ]
 
-export const featuredProject = projects.find((project) => project.featured) ?? projects[0]
+export const featuredProject =
+  projects.find((project) => project.id === portfolio.showreelProjectId)
+  ?? projects.find((project) => project.featured)
+  ?? projects[0]
